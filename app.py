@@ -65,7 +65,7 @@ def receive_message():
                 else:
                     user = User.query.filter_by(user_id=recipient_id).first()
                     print(user)
-                    if 'quick_reply' in message:
+                    if 'quick_reply' in message['message']:
                         payload = message['message']['quick_reply']['payload']
                         print("payload is: " + str(payload))
 
