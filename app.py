@@ -2,7 +2,7 @@ import random
 from flask import Flask, request
 from pymessenger.bot import Bot
 from flask_sqlalchemy import SQLAlchemy
-from flask.ext.heroku import Heroku
+from flask_heroku import Heroku
 from datetime import datetime
 
 app = Flask(__name__)
