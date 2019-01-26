@@ -70,7 +70,7 @@ def receive_message():
                         print("payload is: " + str(payload))
 
                         if user.fractions_in_progress:
-                            if payload == 'corrcet':
+                            if payload == 'correct':
                                 bot.send_text_message(recipient_id, "Well done!")
                                 send_fractions_question(recipient_id)
                             else:
@@ -79,7 +79,7 @@ def receive_message():
                         if payload == "fractions":
                             print(user.fractions_in_progress)
                             user.fractions_in_progress = True
-                            db.sesion.commit()
+                            db.session.commit()
                             send_fractions_question(recipient_id)
                         
 
