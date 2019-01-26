@@ -1,11 +1,32 @@
 import random
 from flask import Flask, request
 from pymessenger.bot import Bot
+from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.heroku import Heroku
+from datetime import datetime
 
 app = Flask(__name__)
 ACCESS_TOKEN = 'EAAfnLOamFLkBAOfiSZCw9uScml7VYJ2F172pcZAAtlfE7ZCfdA6Q6U3pHb6sQaE3XSGbQfuNdresz5zRZAWQz0hY1jSOJxsukudGngzeE44OxHI7g2LBmxLKFA7h8ZBG6K9umSAjras8H3tuf9UbJiROdnFayaGAylotLAq4IdgZDZD'
 VERIFY_TOKEN = 'SSA19'
+heroku = Heroku(app)
 bot = Bot(ACCESS_TOKEN)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/pre-registration'
+db = SQLAlchemy(app)
+
+
+class User(db.Model):
+    __tablename__ = "users"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.String(120), unique=True)
+    last_timestamp = db.Column(db.String(120))
+
+    def __init__(self, user_id):
+        self.user_id = user_id
+        self.last_timestamp = last_timestamp
+
+    def __repr__(self):
+        return '<User ID %r>' % self.user_id
 
 #We will receive messages that Facebook sends our bot at this endpoint 
 @app.route("/", methods=['GET', 'POST'])
@@ -25,13 +46,15 @@ def receive_message():
             if message.get('message'):
                 #Facebook Messenger ID for user so we know where to send response back to
                 recipient_id = message['sender']['id']
-                if message['message'].get('text'):
-                    response_sent_text = get_message()
-                    send_message(recipient_id, response_sent_text)
-                #if user sends us a GIF, photo,video, or any other non-text item
-                if message['message'].get('attachments'):
-                    response_sent_nontext = get_message()
-                    send_message(recipient_id, response_sent_nontext)
+                if not db.session.query(User).filter(User.user_id == recipient_id).count():
+                    bot.send_text_message(recipient_id, "Welcome, we've added you to our database at time" + str(dateime.now()))
+                # if message['message'].get('text'):
+                #     response_sent_text = get_message()
+                #     send_message(recipient_id, response_sent_text)
+                # #if user sends us a GIF, photo,video, or any other non-text item
+                # if message['message'].get('attachments'):
+                #     response_sent_nontext = get_message()
+                #     send_message(recipient_id, response_sent_nontext)
     return "Message Processed"
 
 
