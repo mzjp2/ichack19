@@ -63,9 +63,10 @@ def receive_message():
                     db.session.add(insert)
                     db.session.commit()
                 else:
-                    user = User.query.filter_by(User.user_id==recipient_id).first()
+                    user = User.query.filter_by(user_id=recipient_id).first()
+                    print(user)
                     if 'quick_reply' in message:
-                        payload = message['quick_reply']['payload']
+                        payload = message['message']['quick_reply']['payload']
                         print("payload is: " + str(payload))
 
                         if user.fractions_in_progress:
