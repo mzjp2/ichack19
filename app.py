@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_heroku import Heroku
 from datetime import datetime
 import os
+import questions
 
 
 app = Flask(__name__)
@@ -23,10 +24,16 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.String(120), unique=True)
     last_timestamp = db.Column(db.String(120))
+    fractions_in_progress = db.Column(db.Boolean())
+    quadratics_in_progress = db.Column(db.Boolean())
+    question_number = db.Column(db.Integer)
 
-    def __init__(self, user_id, last_timestamp):
+    def __init__(self, user_id, last_timestamp, fractions_in_progress = False, quadratics_in_progress = False, question_numer = 0):
         self.user_id = user_id
         self.last_timestamp = last_timestamp
+        self.fractions_in_progress = fractions_in_progress
+        self.quadratics_in_progress = quadratics_in_progess
+        self.question_number = question_number
 
     def __repr__(self):
         return '<User ID %r>' % self.user_id
@@ -49,12 +56,31 @@ def receive_message():
             if message.get('message'):
                 #Facebook Messenger ID for user so we know where to send response back to
                 recipient_id = message['sender']['id']
+
                 if not db.session.query(User).filter(User.user_id == recipient_id).count():
                     bot.send_text_message(recipient_id, "Welcome, we've added you to our database at time " + str(datetime.now()))
                     insert = User(recipient_id, datetime.now())
                     db.session.add(insert)
                     db.session.commit()
                 else:
+                    user = User.query.filter_by(user_id = recipient_id).first()
+                    if 'quick_reply' in message:
+                        payload = message['quick_reply']['payload']
+
+                        if user.fractions_in_progress:
+                            if payload == 'corrcet':
+                                bot.send_text_message(recipient_id, "Well done!")
+                                send_fractions_question(recipient_id)
+                            else:
+                                bot.send_text_message(recipient_id, "Not quite...")
+
+                        if payload == "fractions":
+                            user.fractions_in_progress = True
+                            db.sesion.commit()
+                            send_fractions_question(recipient_id)
+                        
+
+
                     welcome_screen(recipient_id)
                 # if message['message'].get('text'):
                 #     response_sent_text = get_message()
@@ -64,6 +90,17 @@ def receive_message():
                 #     response_sent_nontext = get_message()
                 #     send_message(recipient_id, response_sent_nontext)
     return "Message Processed"
+
+def send_fractions_question(recipient_id):
+    question = questions.questiontype1()
+    quick_reply = []
+    for option in question['options']:
+        if question['answer'] == option:
+            quick_reply.append((option, 'correct'))
+        else:
+            quick_reply.append((option, 'incorrect'))
+
+    send_quick_reply(recipient_id, question['question'], quick_reply)
 
 
 def verify_fb_token(token_sent):
@@ -88,14 +125,14 @@ def send_message(recipient_id, response):
 
 def welcome_screen(recipient_id):
     #user_name = bot.get_user_info(recipient_id, fields=first_name)
-    welcome_string = "Hi there, " + "Zain" + " . What would you like to do?"
+    welcome_string = "Hi there, " + "Zain" + ". What would you like to do?"
     #bot.send_text_message(recipient_id, welcome_string)
-    return send_quick_reply(recipient_id, welcome_string, ["Fractions", "Quadratic Equations", "Fucking Chris in the ass"])
+    return send_quick_reply(recipient_id, welcome_string, [("Fractions", "fractions"), ("Quadratic Equations", "quadratic_equations")])
 
 def send_quick_reply(recipient_id, text, quick_replies):
     quick_replies_array = []
     for quick_reply in quick_replies:
-        quick_replies_array.append({"content_type": "text", "title": quick_reply, "payload":""})
+        quick_replies_array.append({"content_type": "text", "title": quick_reply[0], "payload":quick_reply[1]})
     message = {"text": text, "quick_replies": quick_replies_array}
     print(quick_replies_array)
     return bot.send_message(recipient_id, message)
