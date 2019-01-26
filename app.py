@@ -89,7 +89,7 @@ def send_message(recipient_id, response):
 def welcome_screen(recipient_id):
     #user_name = bot.get_user_info(recipient_id, fields=first_name)
     welcome_string = "Hi there, " + "Zain" + " . What would you like to do?"
-    bot.send_text_message(recipient_id, welcome_string)
+    #bot.send_text_message(recipient_id, welcome_string)
     send_quick_reply(recipient_id, "fuck you", ["hi1", "hi2"])
 
 def send_quick_reply(recipient_id, text, quick_replies):
