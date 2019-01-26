@@ -97,7 +97,7 @@ def send_quick_reply(recipient_id, text, quick_replies):
     for quick_reply in quick_replies:
         quick_replies_array.append({"content_type": text, "title": quick_reply, "payload":""})
     message = {"text": text, "quick_replies": quick_replies_array}
-    bot.send_message(recipient_id, message)
+    return bot.send_message(recipient_id, message)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
