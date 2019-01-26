@@ -95,7 +95,7 @@ def welcome_screen(recipient_id):
 def send_quick_reply(recipient_id, text, quick_replies):
     quick_replies_array = []
     for quick_reply in quick_replies:
-        quick_replies_array.append({"content_type": text, "title": quick_reply, "payload":""})
+        quick_replies_array.append({"content_type": "text", "title": text, "payload":""})
     message = {"text": text, "quick_replies": quick_replies_array}
     print(quick_replies_array)
     return bot.send_message(recipient_id, message)
