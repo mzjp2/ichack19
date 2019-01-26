@@ -4,6 +4,8 @@ from pymessenger.bot import Bot
 from flask_sqlalchemy import SQLAlchemy
 from flask_heroku import Heroku
 from datetime import datetime
+import os
+
 
 app = Flask(__name__)
 ACCESS_TOKEN = 'EAAfnLOamFLkBAOfiSZCw9uScml7VYJ2F172pcZAAtlfE7ZCfdA6Q6U3pHb6sQaE3XSGbQfuNdresz5zRZAWQz0hY1jSOJxsukudGngzeE44OxHI7g2LBmxLKFA7h8ZBG6K9umSAjras8H3tuf9UbJiROdnFayaGAylotLAq4IdgZDZD'
@@ -11,7 +13,8 @@ VERIFY_TOKEN = 'SSA19'
 heroku = Heroku(app)
 bot = Bot(ACCESS_TOKEN)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/pre-registration'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
