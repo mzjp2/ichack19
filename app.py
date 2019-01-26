@@ -90,13 +90,14 @@ def welcome_screen(recipient_id):
     #user_name = bot.get_user_info(recipient_id, fields=first_name)
     welcome_string = "Hi there, " + "Zain" + " . What would you like to do?"
     #bot.send_text_message(recipient_id, welcome_string)
-    send_quick_reply(recipient_id, "fuck you", ["hi1", "hi2"])
+    return send_quick_reply(recipient_id, "fuck you", ["hi1", "hi2"])
 
 def send_quick_reply(recipient_id, text, quick_replies):
     quick_replies_array = []
     for quick_reply in quick_replies:
         quick_replies_array.append({"content_type": text, "title": quick_reply, "payload":""})
     message = {"text": text, "quick_replies": quick_replies_array}
+    print(quick_replies_array)
     return bot.send_message(recipient_id, message)
 
 if __name__ == "__main__":
