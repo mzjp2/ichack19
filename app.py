@@ -75,7 +75,7 @@ def receive_message():
                                 bot.send_text_message(recipient_id, "Not quite...")
 
                         if payload == "fractions":
-                            print(user.fractions_inprogress)
+                            print(user.fractions_in_progress)
                             user.fractions_in_progress = True
                             db.sesion.commit()
                             send_fractions_question(recipient_id)
