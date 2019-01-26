@@ -28,11 +28,11 @@ class User(db.Model):
     quadratics_in_progress = db.Column(db.Boolean())
     question_number = db.Column(db.Integer)
 
-    def __init__(self, user_id, last_timestamp, fractions_in_progress = False, quadratics_in_progress = False, question_numer = 0):
+    def __init__(self, user_id, last_timestamp, fractions_in_progress = False, quadratics_in_progress = False, question_number = 0):
         self.user_id = user_id
         self.last_timestamp = last_timestamp
         self.fractions_in_progress = fractions_in_progress
-        self.quadratics_in_progress = quadratics_in_progess
+        self.quadratics_in_progress = quadratics_in_progress
         self.question_number = question_number
 
     def __repr__(self):
