@@ -51,7 +51,7 @@ def receive_message():
                 recipient_id = message['sender']['id']
                 if not db.session.query(User).filter(User.user_id == recipient_id).count():
                     bot.send_text_message(recipient_id, "Welcome, we've added you to our database at time " + str(datetime.now()))
-                    insert = User(user_id, datetime.now())
+                    insert = User(recipient_id, datetime.now())
                     db.session.add(insert)
                     db.session.commit()
                 else:
