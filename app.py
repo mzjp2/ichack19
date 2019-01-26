@@ -54,6 +54,8 @@ def receive_message():
                     insert = User(user_id, datetime.now())
                     db.session.add(insert)
                     db.session.commit()
+                else:
+                    bot.send_text_message(recipient_id, "Hi, you're already a user. Welcome back! :)")
                 # if message['message'].get('text'):
                 #     response_sent_text = get_message()
                 #     send_message(recipient_id, response_sent_text)
