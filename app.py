@@ -50,7 +50,7 @@ def receive_message():
                 #Facebook Messenger ID for user so we know where to send response back to
                 recipient_id = message['sender']['id']
                 if not db.session.query(User).filter(User.user_id == recipient_id).count():
-                    bot.send_text_message(recipient_id, "Welcome, we've added you to our database at time" + str(dateime.now()))
+                    bot.send_text_message(recipient_id, "Welcome, we've added you to our database at time" + str(datetime.now()))
                 # if message['message'].get('text'):
                 #     response_sent_text = get_message()
                 #     send_message(recipient_id, response_sent_text)
