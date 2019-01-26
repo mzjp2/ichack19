@@ -87,8 +87,8 @@ def send_message(recipient_id, response):
     return "success"
 
 def welcome_screen(recipient_id):
-    user_name = bot.get_user_info(recipient_id, fields=first_name)
-    welcome_string = "Hi there, " + user_name + " . What would you like to do?"
+    #user_name = bot.get_user_info(recipient_id, fields=first_name)
+    welcome_string = "Hi there, " + "Zain" + " . What would you like to do?"
     bot.send_text_message(recipient_id, welcome_string)
     send_quick_reply(recipient_id, "fuck you", "hi1", "hi2")
 
