@@ -55,7 +55,7 @@ def receive_message():
                     db.session.add(insert)
                     db.session.commit()
                 else:
-                    bot.send_text_message(recipient_id, "Hi, you're already a user. Welcome back! :)")
+                    welcome_screen(recipient_id)
                 # if message['message'].get('text'):
                 #     response_sent_text = get_message()
                 #     send_message(recipient_id, response_sent_text)
@@ -85,6 +85,19 @@ def send_message(recipient_id, response):
     #sends user the text message provided via input response parameter
     bot.send_text_message(recipient_id, response)
     return "success"
+
+def welcome_screen(recipient_id):
+    user_name = bot.get_user_info(recipient_id, fields=first_name)
+    welcome_string = "Hi there, " + user_name + " . What would you like to do?"
+    bot.send_text_message(recipient_id, welcome_string)
+    send_quick_reply(recipient_id, "fuck you", "hi1", "hi2")
+
+def send_quick_reply(recipient_id, text, quick_replies):
+    quick_replies_array = []
+    for quick_reply in quick_replies:
+        quick_replies_array.append({"content_type": text, "title": quick_reply, "payload": {})
+    message = {"text": text, "quick_replies": quick_replies_array}
+    bot.send_message(recipient_id, message)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
