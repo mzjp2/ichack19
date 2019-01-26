@@ -66,6 +66,7 @@ def receive_message():
                     user = User.query.filter_by(user_id = recipient_id).first()
                     if 'quick_reply' in message:
                         payload = message['quick_reply']['payload']
+                        print("payload is: " + str(payload))
 
                         if user.fractions_in_progress:
                             if payload == 'corrcet':
@@ -135,7 +136,6 @@ def send_quick_reply(recipient_id, text, quick_replies):
     for quick_reply in quick_replies:
         quick_replies_array.append({"content_type": "text", "title": quick_reply[0], "payload":quick_reply[1]})
     message = {"text": text, "quick_replies": quick_replies_array}
-    print(quick_replies_array)
     return bot.send_message(recipient_id, message)
 
 if __name__ == "__main__":
