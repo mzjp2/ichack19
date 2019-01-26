@@ -24,7 +24,7 @@ class User(db.Model):
     user_id = db.Column(db.String(120), unique=True)
     last_timestamp = db.Column(db.String(120))
 
-    def __init__(self, user_id):
+    def __init__(self, user_id, last_timestamp):
         self.user_id = user_id
         self.last_timestamp = last_timestamp
 
@@ -50,7 +50,10 @@ def receive_message():
                 #Facebook Messenger ID for user so we know where to send response back to
                 recipient_id = message['sender']['id']
                 if not db.session.query(User).filter(User.user_id == recipient_id).count():
-                    bot.send_text_message(recipient_id, "Welcome, we've added you to our database at time" + str(datetime.now()))
+                    bot.send_text_message(recipient_id, "Welcome, we've added you to our database at time " + str(datetime.now()))
+                    insert = User(user_id, datetime.now())
+                    db.session.add(insert)
+                    db.session.commit()
                 # if message['message'].get('text'):
                 #     response_sent_text = get_message()
                 #     send_message(recipient_id, response_sent_text)
