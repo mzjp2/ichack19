@@ -35,10 +35,22 @@ def questiontype2(level = 1):
     d = int(10 * level * rand.random() + 1) - 5*level
     e = int(10 * level * rand.random() + 1) - 5*level
     f = int(10 * level * rand.random() + 1) - 5*level
+
     if a + b > 0:
-        question = "What are the roots of " + '\\(x^2 ' + '- ' + str((a+b)) + 'x ' +'+ ' + str(a*b) + '\\)'
+        mid_coeff = '- '+ str(a+b) + 'x'
+    elif a + b == 0:
+        mid_coeff = ''
     else:
-        question = "What are the roots of " + '\\(x^2 ' + '+ ' + str(-(a + b)) + 'x ' + '+ ' + str(a * b) + '\\)'
+        mid_coeff = '+ ' + str(a+b)
+    if a*b > 0:
+        end_coeff = '+ ' + str(a*b)
+    elif a*b == 0:
+        end_coeff = ''
+    else:
+        end_coeff ='- ' + str(a*b)
+     
+    question = "What are the roots of " + '\\(x^2 ' + mid_coeff + 'x ' + end_coeff + '\\)'
+
     real_answer = str(a) + ',' + str(b)
     options = [real_answer, str((a+b)) + ',' + str(a*b), str(c) + ',' + str(d), str(e) + ',' + str(f)]
     rand.shuffle(options)
