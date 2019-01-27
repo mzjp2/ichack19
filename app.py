@@ -101,11 +101,11 @@ def receive_message():
                                     user.num_correct_fractions_questions += 1
                                     db.session.commit()
                                     bot.send_text_message(recipient_id, "Well done!")
-                                    send_fractions_question(recipient_id)
+                                    send_fractions_question(recipient_id, user)
                                 elif payload == 'incorrect':
                                     send_quick_reply(recipient_id, 'Not quite...', [('Comment', 'comment'), ('Next', 'next'), ('Stop', 'stop')])
                                 elif payload == 'next':
-                                    send_fractions_question(recipient_id)
+                                    send_fractions_question(recipient_id, user)
                                     user.question_number = user.question_number + 1
                                     db.session.commit()
                                 elif payload == 'stop':
@@ -113,7 +113,9 @@ def receive_message():
                                     db.session.commit()
                                     reset(user)
                                 elif payload == 'comment':
-                                    bot.send_text_message(recipient_id, 'hi')
+                                    capture_message_as_comment = True
+                                    bot.send_text_message(recipient_id, 'Enter your comment')
+
 
                             if user.quadratics_in_progress:
                                 user.num_quadratics_questions += 1
@@ -140,7 +142,7 @@ def receive_message():
                                 print(user.fractions_in_progress)
                                 user.fractions_in_progress = True
                                 db.session.commit()
-                                send_fractions_question(recipient_id)
+                                send_fractions_question(recipient_id, user)
                             elif payload == "help":
                                 send_help(recipient_id)
                             elif payload == "quadratic_equations":
@@ -152,7 +154,7 @@ def receive_message():
                             welcome_screen(recipient_id)
     return "Message Processed"
 
-def send_fractions_question(recipient_id):
+def send_fractions_question(recipient_id, user):
     question = questions.questiontype1()
     quick_reply = []
     for option in question['options']:
@@ -161,7 +163,7 @@ def send_fractions_question(recipient_id):
         else:
             quick_reply.append((option, 'incorrect'))
 
-    send_quick_reply(recipient_id, question['question'], quick_reply)
+    send_quick_reply(recipient_id, "Question #" + str(user.question_number) + question['question'], quick_reply)
 
 def send_quadratics_question(recipient_id):
     question = questions.questiontype2()
