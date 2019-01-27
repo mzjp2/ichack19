@@ -40,6 +40,10 @@ def questiontype2(level = 1):
         mid_coeff = '- '+ str(abs(a+b)) + 'x '
     elif a + b == 0:
         mid_coeff = ''
+    elif a + b == 1:
+        mid_coeff = '- x '
+    elif a+b == -1:
+        mid_coeff = '+ x '
     else:
         mid_coeff = '+ ' + str(abs(a+b)) + 'x '
     if a*b > 0:
