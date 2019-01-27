@@ -106,7 +106,7 @@ def receive_message():
                                     send_quick_reply(recipient_id, 'Not quite...', [('Comment', 'comment'), ('Next', 'next'), ('Stop', 'stop')])
                                 elif payload == 'next':
                                     send_fractions_question(recipient_id)
-                                    user.question_number = user.question_numer + 1
+                                    user.question_number = user.question_number + 1
                                     db.session.commit()
                                 elif payload == 'stop':
                                     user.num_fractions_questions -= 1
@@ -126,9 +126,9 @@ def receive_message():
                                 elif payload == 'incorrect':
                                     send_quick_reply(recipient_id, 'Not quite...', [('Comment', 'comment'), ('Next', 'next'), ('Stop', 'stop')])
                                 elif payload == 'next':
-                                    send_quadratics_question(recipient_id)
-                                    user.question_number = user.question_numer + 1
+                                    user.question_number = user.question_number + 1
                                     db.session.commit()
+                                    send_quadratics_question(recipient_id)
                                 elif payload == 'stop':
                                     user.num_quadratics_questions -=1
                                     db.session.commit()
