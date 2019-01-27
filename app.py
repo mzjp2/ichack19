@@ -270,7 +270,7 @@ def compute_summary(recipient_id, user, payload):
 
 
 
-@app.route("/homework", methods=['POST'])
+@app.route("/homework", methods=['POST'], endpoint='homework')
 @cross_origin
 def homework():
     content = request.get_json()
@@ -279,19 +279,19 @@ def homework():
     bot.send_text_message(recipient_id, "Hi, Chris! Your teacher has asked you to complete " + content['amount'] + " questions on " + content['topics'] + ". This assignment will be at grade " + content['grade'] + " level. Good luck!")
     return 'success'
 
-@app.route("/get_fractions_score", methods=['GET'])
+@app.route("/get_fractions_score", methods=['GET'], endpoint='get_fractions_score')
 @cross_origin
 def get_fractions_score():
     user = User.query.filter_by(user_id='1979973702071807').first()
     return jsonify(correct_fractions = user.num_correct_fractions_questions, total_fractions = user.num_fractions_questions)
 
-@app.route("/get_quadratics_score", methods=['GET'])
+@app.route("/get_quadratics_score", methods=['GET'], endpoint='get_quadratics_score')
 @cross_origin
 def get_quadratics_score():
     user = User.query.filter_by(user_id='1979973702071807').first()
     return jsonify(correct_quadratics = user.num_correct_quadratics_questions, total_quadratics = user.num_quadratics_questions)
 
-@app.route("/get_total_score", methods=['GET'])
+@app.route("/get_total_score", methods=['GET'], endpoint='get_total_score')
 @cross_origin
 def get_total_score():
     user = User.query.filter_by(user_id='1979973702071807').first()
