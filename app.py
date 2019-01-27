@@ -185,7 +185,7 @@ def verify_fb_token(token_sent):
 def welcome_screen(recipient_id):
     user_info = get_user_info(recipient_id, fields='first_name')
     welcome_string = "Hi there, " + user_info['first_name'] + ". What would you like to do?"
-    return send_quick_reply(recipient_id, welcome_string, [("Fractions", "fractions"), ("Quadratic Equations", "quadratic_equations"), ("Summary", "summary")])
+    return send_quick_reply(recipient_id, welcome_string, [("Fractions", "fractions"), ("Quadratic Equations", "quadratic_equations"), ("View summary", "summary")])
 
 def send_quick_reply(recipient_id, text, quick_replies):
     quick_replies_array = []
@@ -244,7 +244,7 @@ def compute_summary(recipient_id, user, payload):
         bot.send_text_message(recipient_id, "You've answered " + str(user.num_correct_fractions_questions + user.num_correct_quadratics_questions) + " correctly, out of " + str(user.num_fractions_questions + user.num_quadratics_questions))
         bot.send_text_message(recipient_id, 'Predicted grade: ' + str(questions.gradefunction((user.num_correct_fractions_questions + user.num_correct_quadratics_questions) / (user.num_fractions_questions + user.num_quadratics_questions) * 100)))
     
-    send_quick_reply(recipient_id, "", [("Fractions", "fractions"), ("Quadratic Equations", "quadratic_equations"), ("Summary", "summary")])
+    send_quick_reply(recipient_id, "", [("Fractions", "fractions"), ("Quadratic Equations", "quadratic_equations"), ("View summary", "summary")])
 
 
 
