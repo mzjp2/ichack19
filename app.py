@@ -154,7 +154,7 @@ def reset(user):
     user.quadratics_in_progress = False
     user.question_number = 0
 
-def get_user_info(self, recipient_id, fields=None):
+def get_user_info(recipient_id, fields=None):
         """Getting information about the user
         https://developers.facebook.com/docs/messenger-platform/user-profile
         Input:
