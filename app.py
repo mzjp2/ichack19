@@ -196,6 +196,7 @@ def reset(user):
     user.fractions_in_progress = False
     user.quadratics_in_progress = False
     user.question_number = 0
+    db.session.commit()
     welcome_screen(user.user_id)
 
 def get_user_info(recipient_id, fields=None):
