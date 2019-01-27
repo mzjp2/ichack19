@@ -88,7 +88,9 @@ def receive_message():
                             print("payload is: " + str(payload))
 
                             if user.fractions_in_progress:
+                                user.num_fractions_questions += 1
                                 if payload == 'correct':
+                                    user.num_correct_fractions_questions += 1
                                     bot.send_text_message(recipient_id, "Well done!")
                                     send_fractions_question(recipient_id)
                                 elif payload == 'incorrect':
@@ -104,7 +106,9 @@ def receive_message():
                                     bot.send_text_message(recipient_id, 'hi')
 
                             if user.quadratics_in_progress:
+                                user.num_quadratics_questions += 1
                                 if payload == 'correct':
+                                    user.num_correct_quadratics_questions += 1
                                     bot.send_text_message(recipient_id, "Well done!")
                                     send_quadratics_question(recipient_id)
                                 elif payload == 'incorrect':
