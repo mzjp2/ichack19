@@ -134,7 +134,7 @@ def receive_message():
                             elif payload == "quadratic_equations":
                                 user.quadratics_in_progress = True
                                 db.session.commit()
-                                send_quadratics_questions(recipient_id)
+                                send_quadratics_question(recipient_id)
 
                         else:
                             welcome_screen(recipient_id)
@@ -151,7 +151,7 @@ def send_fractions_question(recipient_id):
 
     send_quick_reply(recipient_id, question['question'], quick_reply)
 
-def send_quadratics_questions(recipient_id):
+def send_quadratics_question(recipient_id):
     question = questions.questiontype2()
     quick_reply = []
     for option in question['options']:

@@ -49,7 +49,7 @@ def questiontype2(level = 1):
     else:
         end_coeff ='- ' + str(abs(a*b))
      
-    question = "What are the roots of " + '\\(x^2 ' + mid_coeff + end_coeff + '\\)'
+    question = "What are the roots of " + '\\(x^2 ' + mid_coeff + end_coeff + '\\)' + '?'
 
     real_answer = str(a) + ',' + str(b)
     options = [real_answer, str((a+b)) + ',' + str(a*b), str(c) + ',' + str(d), str(e) + ',' + str(f)]
