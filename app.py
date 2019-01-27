@@ -78,7 +78,7 @@ def receive_message():
                         db.session.commit()
                     else:
                         user = User.query.filter_by(user_id=recipient_id).first()
-                        user.last_timestamp = datetime.now()[:19]
+                        user.last_timestamp = str(datetime.now())[:19]
 
                         if abs(datetime.now() - datetime.strptime(user.last_timestamp, '%Y-%m-%d %H:%M:%S')).seconds > 600:
                             bot.send_text_message(recipient_id, "You've been away for a while! Start again...")
