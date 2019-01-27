@@ -233,13 +233,16 @@ def compute_summary(recipient_id, user, payload):
     bot.send_text_message(recipient_id, "Name: " + user.user_first_name + " " + user.user_last_name)
     bot.send_text_message(recipient_id, "Teacher: Matthew A.")
     bot.send_text_message(recipient_id, "Class: Maths -- Year 13, Set 8")
-    bot.send_text_message(recipient_id, "Predicted grade: " + "9")
+
     if payload == 'fractions-summary':
-        bot.send_text_message(recipient_id, "You've answered " + str(user.num_correect_fractions_questions) + " correctly, out of a total of " + str(user.num_fractions_questions))
+        bot.send_text_message(recipient_id, "You've answered " + str(user.num_correect_fractions_questions) + " questions correctly out of a total of " + str(user.num_fractions_questions))
+        bot.send_text_message(recipient_id, 'Predicted grade for fractions: ' + str(questions.gradefunction(user.num_correct_fractions_questions / user.num_fractions_questions * 100)))
     elif payload == 'fractions-summary':
-        bot.send_text_message(recipient_id, "You've answered " + str(user.num_correect_quadratics_questions) + " correctly, out of a total of " + str(user.num_quadratics_questions))
+        bot.send_text_message(recipient_id, "You've answered " + str(user.num_correect_quadratics_questions) + " correctly out of a total of " + str(user.num_quadratics_questions))
+        bot.send_text_message(recipient_id, 'Predicted grade for quadratics: ' + str(questions.gradefunction(user.num_correct_quadratics_questions / user.num_quadratics_questions * 100)))
     elif payload == 'all-summary':
         bot.send_text_message(recipient_id, "You've answered " + str(user.num_correct_fractions_questions + user.num_correct_quadratics_questions) + " correctly, out of " + str(user.num_fractions_questions + user.num_quadratics_questions))
+        bot.send_text_message(recipient_id, 'Predicted grade: ' + str(questions.gradefunction((user.num_correct_fractions_questions + user.num_correct_quadratics_questions) / (user.num_fractions_questions + user.num_quadratics_questions) * 100)))
     
     send_quick_reply(recipient_id, "", [("Fractions", "fractions"), ("Quadratic Equations", "quadratic_equations"), ("Summary", "summary")])
 

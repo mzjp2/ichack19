@@ -55,3 +55,25 @@ def questiontype2(level = 1):
     options = [real_answer, str((a+b)) + ',' + str(a*b), str(c) + ',' + str(d), str(e) + ',' + str(f)]
     rand.shuffle(options)
     return {'question': question, 'options': options, 'answer': real_answer}
+
+def gradefunction(success):
+    if success >= 133*100/160:
+        return str(9)
+    if success >= 122*100/160:
+        return str(8)
+    if success >= 111*100/160:
+        return str(7)
+    if success >= 99*100/160:
+        return str(6)
+    if success >= 87*100/160:
+        return str(5)
+    if success >= 75*100/160:
+        return str(4)
+    if success >= 54*100/160:
+        return str(3)
+    if success >= 33*100/160:
+        return str(2)
+    if success >= 12*100/160:
+        return str(1)
+    else:
+        return 'U'
