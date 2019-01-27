@@ -93,8 +93,6 @@ def receive_message():
                             elif '-summary' in payload:
                                 compute_summary(recipient_id, user, payload)
 
-                            question_prev = ""
-
 
                             if user.fractions_in_progress:
                                 user.num_fractions_questions += 1
@@ -150,6 +148,7 @@ def receive_message():
                                 send_quadratics_question(recipient_id, user)
 
                         else:
+                            question_prev = ""
                             welcome_screen(recipient_id)
     return "Message Processed"
 
