@@ -37,11 +37,11 @@ def questiontype2(level = 1):
     f = int(10 * level * rand.random() + 1) - 5*level
 
     if a + b > 0:
-        mid_coeff = '- '+ str(a+b) + 'x'
+        mid_coeff = '- '+ str(a+b) + 'x '
     elif a + b == 0:
         mid_coeff = ''
     else:
-        mid_coeff = '+ ' + str(a+b)
+        mid_coeff = '+ ' + str(a+b) + 'x '
     if a*b > 0:
         end_coeff = '+ ' + str(a*b)
     elif a*b == 0:
@@ -49,7 +49,7 @@ def questiontype2(level = 1):
     else:
         end_coeff ='- ' + str(a*b)
      
-    question = "What are the roots of " + '\\(x^2 ' + mid_coeff + 'x ' + end_coeff + '\\)'
+    question = "What are the roots of " + '\\(x^2 ' + mid_coeff + end_coeff + '\\)'
 
     real_answer = str(a) + ',' + str(b)
     options = [real_answer, str((a+b)) + ',' + str(a*b), str(c) + ',' + str(d), str(e) + ',' + str(f)]
