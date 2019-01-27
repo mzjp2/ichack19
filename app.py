@@ -36,10 +36,10 @@ class User(db.Model):
     num_correct_quadratics_questions = db.Column(db.Integer())
     prev_q = db.Column(db.String(240))
     comment_flag = db.Column(db.Boolean())
-    comments = db.Column(postgresql.ARRAY(db.String()))
+    comment = db.Column(db.String())
     
 
-    def __init__(self, user_id, last_timestamp, user_first_name, user_last_name, fractions_in_progress = False, quadratics_in_progress = False, question_number = 0, num_fractions_questions = 0, num_quadratics_questions = 0, num_correct_fractions_questions = 0, num_correct_quadratics_questions = 0, prev_q = "", comment_flag = False, comments=None):
+    def __init__(self, user_id, last_timestamp, user_first_name, user_last_name, fractions_in_progress = False, quadratics_in_progress = False, question_number = 0, num_fractions_questions = 0, num_quadratics_questions = 0, num_correct_fractions_questions = 0, num_correct_quadratics_questions = 0, prev_q = "", comment_flag = False, comment=""):
         self.user_id = user_id
         self.user_first_name = user_first_name
         self.user_last_name = user_last_name
@@ -53,10 +53,7 @@ class User(db.Model):
         self.num_correct_quadratics_questions = num_correct_quadratics_questions
         self.prev_q = prev_q
         self.comment_flag = comment_flag
-        if comments is None:
-            self.comments = []
-        else:
-            self.comments = comments
+        self.comment = comment
 
     def __repr__(self):
         return '<User ID %r>' % self.user_id
@@ -82,7 +79,7 @@ def receive_message():
                 recipient_id = message['sender']['id']
                 if not recipient_id == '316120302349805':
                     if not db.session.query(User).filter(User.user_id == recipient_id).count():
-                        bot.send_text_message(recipient_id, "Welcome. You can...")
+                        bot.send_text_message(recipient_id, "Welcome. It looks like this is the first time you're using LambdaMaths. A quick introduction: we're an early prototype, built by Team SSA at ICHack19 with the purpose of helping students and teachers collaborate and smooth over the process of doing homework and studying maths in small increments. We also want to make students progress and feedback as transaparent as possible for them. Please send in any message to continue to the main page. Have fun!")
                         user_info = get_user_info(recipient_id, fields='first_name')
                         insert = User(recipient_id, str(datetime.now())[:19], user_info['first_name'], user_info['last_name'])
                         db.session.add(insert)
@@ -96,10 +93,9 @@ def receive_message():
                             reset(user)
 
                         if user.comment_flag:
-                            user.comments.append(user.prev_q)
-                            user.comments.append(message['message']['text'])
+                            user.comment = message['message']['text']
+                            comment_flag = False
                             db.session.commit()
-                            bot.send_text_message(recipient_id, 'hi')
 
 
                         if 'quick_reply' in message['message']:
