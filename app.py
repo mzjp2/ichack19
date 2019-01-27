@@ -122,13 +122,11 @@ def receive_message():
                                     user.num_correct_quadratics_questions += 1
                                     db.session.commit()
                                     bot.send_text_message(recipient_id, "Well done!")
-                                    send_quadratics_question(recipient_id)
+                                    send_quadratics_question(recipient_id, user)
                                 elif payload == 'incorrect':
                                     send_quick_reply(recipient_id, 'Not quite...', [('Comment', 'comment'), ('Next', 'next'), ('Stop', 'stop')])
                                 elif payload == 'next':
-                                    user.question_number = user.question_number + 1
-                                    db.session.commit()
-                                    send_quadratics_question(recipient_id)
+                                    send_quadratics_question(recipient_id, user)
                                 elif payload == 'stop':
                                     user.num_quadratics_questions -=1
                                     db.session.commit()
@@ -146,7 +144,7 @@ def receive_message():
                             elif payload == "quadratic_equations":
                                 user.quadratics_in_progress = True
                                 db.session.commit()
-                                send_quadratics_question(recipient_id)
+                                send_quadratics_question(recipient_id, user)
 
                         else:
                             welcome_screen(recipient_id)
@@ -164,7 +162,7 @@ def send_fractions_question(recipient_id, user):
     db.session.commit()
     send_quick_reply(recipient_id, "Question #" + str(user.question_number) + ": " + question['question'], quick_reply)
 
-def send_quadratics_question(recipient_id):
+def send_quadratics_question(recipient_id,user):
     question = questions.questiontype2()
     quick_reply = []
     for option in question['options']:
@@ -172,8 +170,9 @@ def send_quadratics_question(recipient_id):
             quick_reply.append((option, 'correct'))
         else:
             quick_reply.append((option, 'incorrect'))
-
-    send_quick_reply(recipient_id, question['question'], quick_reply)
+    user.question_number += 1
+    db.session.commit()
+    send_quick_reply(recipient_id, "Question #" + str(user.question_number) + ": " + question['question'], quick_reply)
 
 
 def verify_fb_token(token_sent):
