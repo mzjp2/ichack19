@@ -10,6 +10,13 @@ import requests
 from sqlalchemy.dialects import postgresql
 
 app = Flask(__name__)
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", '*');
+    res.header("Access-Control-Allow-Credentials", true);
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
+    next();
+});
 ACCESS_TOKEN = 'EAAfnLOamFLkBAOfiSZCw9uScml7VYJ2F172pcZAAtlfE7ZCfdA6Q6U3pHb6sQaE3XSGbQfuNdresz5zRZAWQz0hY1jSOJxsukudGngzeE44OxHI7g2LBmxLKFA7h8ZBG6K9umSAjras8H3tuf9UbJiROdnFayaGAylotLAq4IdgZDZD'
 VERIFY_TOKEN = 'SSA19'
 heroku = Heroku(app)
@@ -275,8 +282,20 @@ def homework():
     bot.send_text_message(recipient_id, "Hi, Chris! Your teacher has asked you to complete " + content['amount'] + " questions on " + content['topics'] + ". This assignment will be at grade " + content['grade'] + " level. Good luck!")
     return 'success'
 
+@app.route("/get_fractions_score", methods=['GET'])
+def get_fractions_score():
+    user = User.query.filter_by(user_id='1979973702071807').first()
+    return jsonify(correct_fractions = user.num_correct_fractions_questions, total_fractions = user.num_fractions_questions)
 
+@app.route("/get_quadratics_score", methods=['GET'])
+def get_quadratics_score():
+    user = User.query.filter_by(user_id='1979973702071807').first()
+    return jsonify(correct_quadratics = user.num_correct_quadratics_questions, total_quadratics = user.num_quadratics_questions)
 
+@app.route("/get_total_score", methods=['GET'])
+def get_total_score():
+    user = User.query.filter_by(user_id='1979973702071807').first()
+    return jsonify(correct_questions = user.num_correct_fractions_questions + user.num_correct_quadratics_questions, total_fractions = user.num_fractions_questions + user.num_quadratics_questions)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
