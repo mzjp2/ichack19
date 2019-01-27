@@ -300,7 +300,7 @@ def get_total_score():
     user = User.query.filter_by(user_id='1979973702071807').first()
     return jsonify(correct_questions = user.num_correct_fractions_questions + user.num_correct_quadratics_questions, total_fractions = user.num_fractions_questions + user.num_quadratics_questions)
 
-@app.route("/get_comment", methods=['POST', 'GET'], endpoint='get_total_score')
+@app.route("/get_comment", methods=['POST', 'GET'], endpoint='get_comment')
 @cross_origin()
 def get_total_score():
     user = User.query.filter_by(user_id='1979973702071807').first()
