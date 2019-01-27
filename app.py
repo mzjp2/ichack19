@@ -58,13 +58,17 @@ def receive_message():
                 recipient_id = message['sender']['id']
                 if not recipient_id == '316120302349805':
                     if not db.session.query(User).filter(User.user_id == recipient_id).count():
-                        bot.send_text_message(recipient_id, "Welcome, we've added you to our database at time " + str(datetime.now()))
-                        insert = User(recipient_id, datetime.now())
+                        bot.send_text_message(recipient_id, "Welcome. You can...")
+                        insert = User(recipient_id, str(datetime.now())[:19])
                         db.session.add(insert)
                         db.session.commit()
                     else:
                         user = User.query.filter_by(user_id=recipient_id).first()
-                        print(user)
+
+                        if abs(datetime.now() - datetime.strptime(user.last_timestamp)).seconds > 600:
+                            bot.send_text_message(recipient_id, "You've been away for a while! Start again...")
+                            reset(user)
+
                         if 'quick_reply' in message['message']:
                             payload = message['message']['quick_reply']['payload']
                             print("payload is: " + str(payload))
@@ -81,6 +85,13 @@ def receive_message():
                                 user.fractions_in_progress = True
                                 db.session.commit()
                                 send_fractions_question(recipient_id)
+                            elif payload == "help":
+                                send_help(recipient_id)
+                            elif payload == "quadratic_equations":
+                                user.quadratics_in_progress = True
+                                db.session.commit()
+                                send_quadratics_questions(recipient_id)
+
                         else:
                             welcome_screen(recipient_id)
                 # if message['message'].get('text'):
@@ -125,10 +136,11 @@ def send_message(recipient_id, response):
     return "success"
 
 def welcome_screen(recipient_id):
-    #user_name = bot.get_user_info(recipient_id, fields=first_name)
+    user_name = get_user_info(recipient_id, fields='first_name')
+    print(user_name)
     welcome_string = "Hi there, " + "Zain" + ". What would you like to do?"
     #bot.send_text_message(recipient_id, welcome_string)
-    return send_quick_reply(recipient_id, welcome_string, [("Fractions", "fractions"), ("Quadratic Equations", "quadratic_equations")])
+    return send_quick_reply(recipient_id, welcome_string, [("Fractions", "fractions"), ("Quadratic Equations", "quadratic_equations"), ("Help", "help")])
 
 def send_quick_reply(recipient_id, text, quick_replies):
     quick_replies_array = []
@@ -136,6 +148,36 @@ def send_quick_reply(recipient_id, text, quick_replies):
         quick_replies_array.append({"content_type": "text", "title": quick_reply[0], "payload":quick_reply[1]})
     message = {"text": text, "quick_replies": quick_replies_array}
     return bot.send_message(recipient_id, message)
+
+def reset(user):
+    user.fractions_in_progress = False
+    user.quadratics_in_progress = False
+    user.question_number = 0
+
+def get_user_info(self, recipient_id, fields=None):
+        """Getting information about the user
+        https://developers.facebook.com/docs/messenger-platform/user-profile
+        Input:
+          recipient_id: recipient id to send to
+        Output:
+          Response from API as <dict>
+        """
+        params = {}
+        if fields is not None and isinstance(fields, (list, tuple)):
+            params['fields'] = ",".join(fields)
+
+        params.update(self.auth_args)
+
+        request_endpoint = '{0}/{1}'.format(self.graph_url, recipient_id)
+        response = requests.get(request_endpoint, params=params)
+        if response.status_code == 200:
+            return response.json()
+
+        return None
+
+def send_help(recipient_id):
+     pass
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
