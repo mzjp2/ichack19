@@ -1,5 +1,5 @@
 import random
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from pymessenger.bot import Bot
 from flask_sqlalchemy import SQLAlchemy
 from flask_heroku import Heroku
@@ -264,6 +264,14 @@ def compute_summary(recipient_id, user, payload):
         bot.send_text_message(recipient_id, 'Predicted grade: ' + str(questions.gradefunction((user.num_correct_fractions_questions + user.num_correct_quadratics_questions) / (user.num_fractions_questions + user.num_quadratics_questions) * 100)))
     
     send_quick_reply(recipient_id, "What would you like to do now?", [("Fractions", "fractions"), ("Quadratic Equations", "quadratic_equations"), ("View summary", "summary")])
+
+
+
+@app.route("/homework", methods=['POST'])
+def homework():
+    content = request.get_json()
+    print(content)
+
 
 
 
