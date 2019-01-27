@@ -105,6 +105,7 @@ def receive_message():
                                     bot.send_text_message(recipient_id, "Well done!")
                                     send_fractions_question(recipient_id, user)
                                 elif payload == 'incorrect':
+                                    bot.send_text_message(recipient_id, "PLEASE COMMENT THIS" +question_prev)
                                     send_quick_reply(recipient_id, 'Not quite...', [('Comment', 'comment'), ('Next', 'next'), ('Stop', 'stop')])
                                 elif payload == 'next':
                                     send_fractions_question(recipient_id, user)
