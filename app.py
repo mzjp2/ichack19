@@ -274,7 +274,7 @@ def compute_summary(recipient_id, user, payload):
 @cross_origin()
 def homework():
     if request.method == 'POST':
-        print(request.json(['amount']))
+        print(request.json['amount'])
 
     content = request.get_json()
     print(content)
