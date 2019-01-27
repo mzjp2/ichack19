@@ -179,7 +179,7 @@ def verify_fb_token(token_sent):
 def welcome_screen(recipient_id):
     user_info = get_user_info(recipient_id, fields='first_name')
     welcome_string = "Hi there, " + user_info['first_name'] + ". What would you like to do?"
-    return send_quick_reply(recipient_id, welcome_string, [("Fractions", "fractions"), ("Quadratic Equations", "quadratic_equations"), ("Help", "help")])
+    return send_quick_reply(recipient_id, welcome_string, [("Fractions", "fractions"), ("Quadratic Equations", "quadratic_equations"), ("Summary", "summary")])
 
 def send_quick_reply(recipient_id, text, quick_replies):
     quick_replies_array = []
@@ -192,6 +192,7 @@ def reset(user):
     user.fractions_in_progress = False
     user.quadratics_in_progress = False
     user.question_number = 0
+    welcome_screen(user.user_id)
 
 def get_user_info(recipient_id, fields=None):
         """Getting information about the user
@@ -222,10 +223,10 @@ def ask_summary(recipient_id):
     send_quick_reply(recipient_id, "Hi,  " + user_info['first_name'] + '!' + " What would you like to see?", [('Fractions summary', 'fractions-summary'), ('Quadratics summary', 'quadratics-summary'), ('All summary', 'all-summary')])
 
 def compute_summary(recipient_id, user, payload):
-     bot.send_text_message(recipient_id, "Name: " user.first_name + " " + user.last_name)
-     bot.send_text_message(recipient_id, "Teacher": "Matthew A.")
-     bot.send_text_message(recipient_id, "Class: " "Maths -- Year 13, Set 8")
-     bot.send_text_message(recipient_id, "Predicted grade: " + "9")
+    bot.send_text_message(recipient_id, "Name: " + user.first_name + " " + user.last_name)
+    bot.send_text_message(recipient_id, "Teacher: Matthew A.")
+    bot.send_text_message(recipient_id, "Class: Maths -- Year 13, Set 8")
+    bot.send_text_message(recipient_id, "Predicted grade: " + "9")
     if payload == 'fractions-summary':
         bot.send_text_message(recipient_id, "You've answered " + str(user.num_correect_fractions_questions) + " correctly, out of a total of " + str(user.num_fractions_questions))
     elif payload == 'fractions-summary':
