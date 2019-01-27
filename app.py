@@ -24,13 +24,17 @@ class User(db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.String(120), unique=True)
+    user_first_name = db.Column(db.String(120))
+    user_last_name = db.Column(db.String(120))
     last_timestamp = db.Column(db.String(120))
     fractions_in_progress = db.Column(db.Boolean())
     quadratics_in_progress = db.Column(db.Boolean())
     question_number = db.Column(db.Integer)
 
-    def __init__(self, user_id, last_timestamp, fractions_in_progress = False, quadratics_in_progress = False, question_number = 0):
+    def __init__(self, user_id, last_timestamp, user_first_name, user_last_name, fractions_in_progress = False, quadratics_in_progress = False, question_number = 0):
         self.user_id = user_id
+        self.user_first_name = user_first_name
+        self.user_last_name = user_last_name
         self.last_timestamp = last_timestamp
         self.fractions_in_progress = fractions_in_progress
         self.quadratics_in_progress = quadratics_in_progress
@@ -60,7 +64,8 @@ def receive_message():
                 if not recipient_id == '316120302349805':
                     if not db.session.query(User).filter(User.user_id == recipient_id).count():
                         bot.send_text_message(recipient_id, "Welcome. You can...")
-                        insert = User(recipient_id, str(datetime.now())[:19])
+                        user_info = get_user_info(recipient_id, fields='first_name')
+                        insert = User(recipient_id, str(datetime.now())[:19], user_info['first_name'], user_info['last_name'])
                         db.session.add(insert)
                         db.session.commit()
                     else:
@@ -137,10 +142,8 @@ def send_message(recipient_id, response):
     return "success"
 
 def welcome_screen(recipient_id):
-    user_name = get_user_info(recipient_id, fields='first_name')
-    print(user_name)
-    welcome_string = "Hi there, " + "Zain" + ". What would you like to do?"
-    #bot.send_text_message(recipient_id, welcome_string)
+    user_info = get_user_info(recipient_id, fields='first_name')
+    welcome_string = "Hi there, " + user_info['first_name'] + ". What would you like to do?"
     return send_quick_reply(recipient_id, welcome_string, [("Fractions", "fractions"), ("Quadratic Equations", "quadratic_equations"), ("Help", "help")])
 
 def send_quick_reply(recipient_id, text, quick_replies):
