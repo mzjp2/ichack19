@@ -90,36 +90,42 @@ def receive_message():
 
                             if user.fractions_in_progress:
                                 user.num_fractions_questions += 1
+                                db.session.commit()
                                 if payload == 'correct':
                                     user.num_correct_fractions_questions += 1
                                     bot.send_text_message(recipient_id, "Well done!")
                                     send_fractions_question(recipient_id)
                                 elif payload == 'incorrect':
                                     bot.send_text_message(recipient_id, "Not quite...")
-                                    bot.send_quick_reply(recipient_id, 'Not quite...', [('Comment', 'comment'), ('Next', 'next'), ('Stop', 'stop')])
+                                    send_quick_reply(recipient_id, 'Not quite...', [('Comment', 'comment'), ('Next', 'next'), ('Stop', 'stop')])
                                 elif payload == 'next':
                                     send_fractions_question(recipient_id)
                                     user.question_number = user.question_numer + 1
                                     db.session.commit()
                                 elif payload == 'stop':
+                                    user.num_fractions_questions -= 1
+                                    db.session.commit()
                                     reset(user)
                                 elif payload == 'comment':
                                     bot.send_text_message(recipient_id, 'hi')
 
                             if user.quadratics_in_progress:
                                 user.num_quadratics_questions += 1
+                                db.session.commit()
                                 if payload == 'correct':
                                     user.num_correct_quadratics_questions += 1
                                     bot.send_text_message(recipient_id, "Well done!")
                                     send_quadratics_question(recipient_id)
                                 elif payload == 'incorrect':
                                     bot.send_text_message(recipient_id, "Not quite...")
-                                    bot.send_quick_reply(recipient_id, 'Not quite...', [('Comment', 'comment'), ('Next', 'next'), ('Stop', 'stop')])
+                                    send_quick_reply(recipient_id, 'Not quite...', [('Comment', 'comment'), ('Next', 'next'), ('Stop', 'stop')])
                                 elif payload == 'next':
                                     send_quadratics_question(recipient_id)
                                     user.question_number = user.question_numer + 1
                                     db.session.commit()
                                 elif payload == 'stop':
+                                    user.num_quadratics_questions -=1
+                                    db.session.commit()
                                     reset(user)
                                 elif payload == 'comment':
                                     bot.send_text_message(recipient_id, 'hi')
@@ -210,6 +216,23 @@ def get_user_info(recipient_id, fields=None):
 
 def send_help(recipient_id):
      pass
+
+def ask_summary(recipient_id):
+    user_info = bot.get_user_info(recipient_id, fields='first_name')
+    send_quick_reply(recipient_id, "Hi,  " + user_info['first_name'] + '!' + " What would you like to see?", [('Fractions summary', 'fractions-summary'), ('Quadratics summary', 'quadratics-summary'), ('All summary', 'all-summary')])
+
+def compute_summary(recipient_id, user, payload):
+     bot.send_text_message(recipient_id, "Name: " user.first_name + " " + user.last_name)
+     bot.send_text_message(recipient_id, "Teacher": "Matthew A.")
+     bot.send_text_message(recipient_id, "Class: " "Maths -- Year 13, Set 8")
+     bot.send_text_message(recipient_id, "Predicted grade: " + "9")
+    if payload == 'fractions-summary':
+        bot.send_text_message(recipient_id, "You've answered " + str(user.num_correect_fractions_questions) + " correctly, out of a total of " + str(user.num_fractions_questions))
+    elif payload == 'fractions-summary':
+        bot.send_text_message(recipient_id, "You've answered " + str(user.num_correect_quadratics_questions) + " correctly, out of a total of " + str(user.num_quadratics_questions))
+    elif payload == 'all-summary':
+        bot.send_text_message(recipient_id, "You've answered " + str(user.num_correct_fractions_questions + user.num_correct_quadratics_questions) + "correctly, out of " + str(user.num_fractions_questions + user.num_quadratics_questions))
+
 
 
 if __name__ == "__main__":
