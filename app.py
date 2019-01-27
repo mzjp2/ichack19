@@ -279,7 +279,7 @@ def homework():
     content = request.get_json()
     print(content)
     recipient_id = '1979973702071807'
-    bot.send_text_message(recipient_id, "Hi, Chris! Your teacher has asked you to complete " + content['amount'] + " questions on " + content['topics'] + ". This assignment will be at grade " + content['grade'] + " level. Good luck!")
+    bot.send_text_message(recipient_id, "Hi, Chris! Your teacher has asked you to complete " + content['amount'] + " questions on " + content['topic'] + ". This assignment will be at grade " + content['grade'] + " level. Good luck!")
     return 'success'
 
 @app.route("/get_fractions_score", methods=['GET'], endpoint='get_fractions_score')
