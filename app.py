@@ -8,15 +8,11 @@ import os
 import questions
 import requests
 from sqlalchemy.dialects import postgresql
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", '*');
-    res.header("Access-Control-Allow-Credentials", true);
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
-    next();
-});
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 ACCESS_TOKEN = 'EAAfnLOamFLkBAOfiSZCw9uScml7VYJ2F172pcZAAtlfE7ZCfdA6Q6U3pHb6sQaE3XSGbQfuNdresz5zRZAWQz0hY1jSOJxsukudGngzeE44OxHI7g2LBmxLKFA7h8ZBG6K9umSAjras8H3tuf9UbJiROdnFayaGAylotLAq4IdgZDZD'
 VERIFY_TOKEN = 'SSA19'
 heroku = Heroku(app)
@@ -275,6 +271,7 @@ def compute_summary(recipient_id, user, payload):
 
 
 @app.route("/homework", methods=['POST'])
+@cross_origin
 def homework():
     content = request.get_json()
     print(content)
@@ -283,16 +280,19 @@ def homework():
     return 'success'
 
 @app.route("/get_fractions_score", methods=['GET'])
+@cross_origin
 def get_fractions_score():
     user = User.query.filter_by(user_id='1979973702071807').first()
     return jsonify(correct_fractions = user.num_correct_fractions_questions, total_fractions = user.num_fractions_questions)
 
 @app.route("/get_quadratics_score", methods=['GET'])
+@cross_origin
 def get_quadratics_score():
     user = User.query.filter_by(user_id='1979973702071807').first()
     return jsonify(correct_quadratics = user.num_correct_quadratics_questions, total_quadratics = user.num_quadratics_questions)
 
 @app.route("/get_total_score", methods=['GET'])
+@cross_origin
 def get_total_score():
     user = User.query.filter_by(user_id='1979973702071807').first()
     return jsonify(correct_questions = user.num_correct_fractions_questions + user.num_correct_quadratics_questions, total_fractions = user.num_fractions_questions + user.num_quadratics_questions)
