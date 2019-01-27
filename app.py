@@ -163,7 +163,7 @@ def send_fractions_question(recipient_id, user):
         else:
             quick_reply.append((option, 'incorrect'))
 
-    send_quick_reply(recipient_id, "Question #" + str(user.question_number) + question['question'], quick_reply)
+    send_quick_reply(recipient_id, "Question #" + str(user.question_number + 1) + ": " + question['question'], quick_reply)
 
 def send_quadratics_question(recipient_id):
     question = questions.questiontype2()
