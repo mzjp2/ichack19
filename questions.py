@@ -28,7 +28,7 @@ def questiontype1(level = 2):
     options = answers
     return {'question': question, 'options': options, 'answer': real_answer}
 
-def questiontype2(level):
+def questiontype2(level = 1):
     a = int(10 * level * rand.random() + 1) - 5*level
     b = int(10 * level * rand.random() + 1) - 5*level
     c = int(10 * level * rand.random() + 1) - 5*level
