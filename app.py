@@ -127,7 +127,8 @@ def receive_message():
                                     db.session.commit()
                                     reset(user)
                                 elif payload == 'comment':
-                                    capture_message_as_comment = True
+                                    user.comment_flag = True
+                                    db.session.commit()
                                     bot.send_text_message(recipient_id, 'Enter your comment, stating your answer and why you thought it was correct')
                                 
 
