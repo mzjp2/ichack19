@@ -163,6 +163,7 @@ def send_fractions_question(recipient_id, user):
     user.question_number += 1
     db.session.commit()
     send_quick_reply(recipient_id, "Question #" + str(user.question_number) + ": " + question['question'], quick_reply)
+    global question_prev
     question_prev = question['question']
     return question
 
