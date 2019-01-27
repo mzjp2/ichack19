@@ -39,7 +39,7 @@ class User(db.Model):
     comments = db.Column(postgresql.ARRAY(db.String()))
     
 
-    def __init__(self, user_id, last_timestamp, user_first_name, user_last_name, fractions_in_progress = False, quadratics_in_progress = False, question_number = 0, num_fractions_questions = 0, num_quadratics_questions = 0, num_correct_fractions_questions = 0, num_correct_quadratics_questions = 0, prev_q = "", comment = False):
+    def __init__(self, user_id, last_timestamp, user_first_name, user_last_name, fractions_in_progress = False, quadratics_in_progress = False, question_number = 0, num_fractions_questions = 0, num_quadratics_questions = 0, num_correct_fractions_questions = 0, num_correct_quadratics_questions = 0, prev_q = "", comment_flag = False, comments=None):
         self.user_id = user_id
         self.user_first_name = user_first_name
         self.user_last_name = user_last_name
@@ -53,7 +53,10 @@ class User(db.Model):
         self.num_correct_quadratics_questions = num_correct_quadratics_questions
         self.prev_q = prev_q
         self.comment_flag = comment_flag
-        self.comments = comments
+        if comments is None:
+            self.comments = []
+        else:
+            self.comments = comments
 
     def __repr__(self):
         return '<User ID %r>' % self.user_id
