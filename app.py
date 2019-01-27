@@ -99,6 +99,7 @@ def receive_message():
                                 db.session.commit()
                                 if payload == 'correct':
                                     user.num_correct_fractions_questions += 1
+                                    db.session.commit()
                                     bot.send_text_message(recipient_id, "Well done!")
                                     send_fractions_question(recipient_id)
                                 elif payload == 'incorrect':
@@ -119,6 +120,7 @@ def receive_message():
                                 db.session.commit()
                                 if payload == 'correct':
                                     user.num_correct_quadratics_questions += 1
+                                    db.session.commit()
                                     bot.send_text_message(recipient_id, "Well done!")
                                     send_quadratics_question(recipient_id)
                                 elif payload == 'incorrect':
