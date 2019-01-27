@@ -94,7 +94,8 @@ def receive_message():
 
                         if user.comment_flag:
                             user.comment = message['message']['text']
-                            comment_flag = False
+                            user.comment_flag = False
+                            bot.send_text_message(recipient_id, "Your comment has been sent to your teacher and you'll get help soon! :)")
                             db.session.commit()
 
 
