@@ -88,6 +88,12 @@ def receive_message():
                             payload = message['message']['quick_reply']['payload']
                             print("payload is: " + str(payload))
 
+                            if payload == 'summary':
+                                ask_summary(recipient_id)
+                            elif 'summary-' in payload:
+                                compute_summary(recipient_id, user, payload)
+
+
                             if user.fractions_in_progress:
                                 user.num_fractions_questions += 1
                                 db.session.commit()
