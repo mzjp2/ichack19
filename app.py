@@ -237,7 +237,7 @@ def compute_summary(recipient_id, user, payload):
     if payload == 'fractions-summary':
         bot.send_text_message(recipient_id, "You've answered " + str(user.num_correct_fractions_questions) + " questions correctly out of a total of " + str(user.num_fractions_questions))
         bot.send_text_message(recipient_id, 'Predicted grade for fractions: ' + str(questions.gradefunction(user.num_correct_fractions_questions / user.num_fractions_questions * 100)))
-    elif payload == 'fractions-summary':
+    elif payload == 'quadratics-summary':
         bot.send_text_message(recipient_id, "You've answered " + str(user.num_correct_quadratics_questions) + " correctly out of a total of " + str(user.num_quadratics_questions))
         bot.send_text_message(recipient_id, 'Predicted grade for quadratics: ' + str(questions.gradefunction(user.num_correct_quadratics_questions / user.num_quadratics_questions * 100)))
     elif payload == 'all-summary':
