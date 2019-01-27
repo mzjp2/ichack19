@@ -65,7 +65,7 @@ def receive_message():
                     else:
                         user = User.query.filter_by(user_id=recipient_id).first()
 
-                        if abs(datetime.now() - datetime.strptime(user.last_timestamp)).seconds > 600:
+                        if abs(datetime.now() - datetime.strptime(user.last_timestamp, '%Y-%m-%d %H:%M:%S')).seconds > 600:
                             bot.send_text_message(recipient_id, "You've been away for a while! Start again...")
                             reset(user)
 
