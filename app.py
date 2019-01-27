@@ -106,8 +106,6 @@ def receive_message():
                                     send_quick_reply(recipient_id, 'Not quite...', [('Comment', 'comment'), ('Next', 'next'), ('Stop', 'stop')])
                                 elif payload == 'next':
                                     send_fractions_question(recipient_id, user)
-                                    user.question_number = user.question_number + 1
-                                    db.session.commit()
                                 elif payload == 'stop':
                                     user.num_fractions_questions -= 1
                                     db.session.commit()
@@ -162,8 +160,9 @@ def send_fractions_question(recipient_id, user):
             quick_reply.append((option, 'correct'))
         else:
             quick_reply.append((option, 'incorrect'))
-
-    send_quick_reply(recipient_id, "Question #" + str(user.question_number + 1) + ": " + question['question'], quick_reply)
+    user.question_number += 1
+    db.session.commit()
+    send_quick_reply(recipient_id, "Question #" + str(user.question_number) + ": " + question['question'], quick_reply)
 
 def send_quadratics_question(recipient_id):
     question = questions.questiontype2()
