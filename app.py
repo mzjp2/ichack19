@@ -90,7 +90,7 @@ def receive_message():
 
                             if payload == 'summary':
                                 ask_summary(recipient_id)
-                            elif 'summary-' in payload:
+                            elif '-summary' in payload:
                                 compute_summary(recipient_id, user, payload)
 
 
