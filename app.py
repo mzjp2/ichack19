@@ -166,9 +166,9 @@ def get_user_info(recipient_id, fields=None):
         if fields is not None and isinstance(fields, (list, tuple)):
             params['fields'] = ",".join(fields)
 
-        params.update(self.auth_args)
+        params.update(bot.auth_args)
 
-        request_endpoint = '{0}/{1}'.format(self.graph_url, recipient_id)
+        request_endpoint = '{0}/{1}'.format(bot.graph_url, recipient_id)
         response = requests.get(request_endpoint, params=params)
         if response.status_code == 200:
             return response.json()
