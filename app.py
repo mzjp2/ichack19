@@ -230,7 +230,7 @@ def ask_summary(recipient_id):
     send_quick_reply(recipient_id, "Hi,  " + user_info['first_name'] + '!' + " What would you like to see?", [('Fractions summary', 'fractions-summary'), ('Quadratics summary', 'quadratics-summary'), ('All summary', 'all-summary')])
 
 def compute_summary(recipient_id, user, payload):
-    bot.send_text_message(recipient_id, "Name: " + user.first_name + " " + user.last_name)
+    bot.send_text_message(recipient_id, "Name: " + user.user_first_name + " " + user.user_last_name)
     bot.send_text_message(recipient_id, "Teacher: Matthew A.")
     bot.send_text_message(recipient_id, "Class: Maths -- Year 13, Set 8")
     bot.send_text_message(recipient_id, "Predicted grade: " + "9")
