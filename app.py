@@ -96,7 +96,8 @@ def receive_message():
                             reset(user)
 
                         if user.comment_flag:
-                            user.comments.append(user.prev_q, message['message']['text'])
+                            user.comments.append(user.prev_q)
+                            user.comments.append(message['message']['text'])
                             db.session.commit()
                             bot.send_text_message(recipient_id, 'hi')
 
