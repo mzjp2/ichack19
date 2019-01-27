@@ -8,6 +8,7 @@ import os
 import questions
 import requests
 
+question_prev = ""
 
 app = Flask(__name__)
 ACCESS_TOKEN = 'EAAfnLOamFLkBAOfiSZCw9uScml7VYJ2F172pcZAAtlfE7ZCfdA6Q6U3pHb6sQaE3XSGbQfuNdresz5zRZAWQz0hY1jSOJxsukudGngzeE44OxHI7g2LBmxLKFA7h8ZBG6K9umSAjras8H3tuf9UbJiROdnFayaGAylotLAq4IdgZDZD'
@@ -136,19 +137,16 @@ def receive_message():
                                     bot.send_text_message(recipient_id, 'hi')
 
                             if payload == "fractions":
-                                print(user.fractions_in_progress)
                                 user.fractions_in_progress = True
                                 db.session.commit()
-                                send_fractions_question(recipient_id, user)
+                                question_prev = send_fractions_question(recipient_id, user)
                             elif payload == "help":
                                 send_help(recipient_id)
                             elif payload == "quadratic_equations":
                                 user.quadratics_in_progress = True
                                 db.session.commit()
                                 send_quadratics_question(recipient_id, user)
-
                         else:
-                            question_prev = ""
                             welcome_screen(recipient_id)
     return "Message Processed"
 
