@@ -239,7 +239,9 @@ def compute_summary(recipient_id, user, payload):
     elif payload == 'fractions-summary':
         bot.send_text_message(recipient_id, "You've answered " + str(user.num_correect_quadratics_questions) + " correctly, out of a total of " + str(user.num_quadratics_questions))
     elif payload == 'all-summary':
-        bot.send_text_message(recipient_id, "You've answered " + str(user.num_correct_fractions_questions + user.num_correct_quadratics_questions) + "correctly, out of " + str(user.num_fractions_questions + user.num_quadratics_questions))
+        bot.send_text_message(recipient_id, "You've answered " + str(user.num_correct_fractions_questions + user.num_correct_quadratics_questions) + " correctly, out of " + str(user.num_fractions_questions + user.num_quadratics_questions))
+    
+    send_quick_reply(recipient_id, "", [("Fractions", "fractions"), ("Quadratic Equations", "quadratic_equations"), ("Summary", "summary")])
 
 
 
