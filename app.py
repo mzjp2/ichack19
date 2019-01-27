@@ -56,35 +56,33 @@ def receive_message():
             if message.get('message'):
                 #Facebook Messenger ID for user so we know where to send response back to
                 recipient_id = message['sender']['id']
+                if not recipient_id == '316120302349805':
+                    if not db.session.query(User).filter(User.user_id == recipient_id).count():
+                        bot.send_text_message(recipient_id, "Welcome, we've added you to our database at time " + str(datetime.now()))
+                        insert = User(recipient_id, datetime.now())
+                        db.session.add(insert)
+                        db.session.commit()
+                    else:
+                        user = User.query.filter_by(user_id=recipient_id).first()
+                        print(user)
+                        if 'quick_reply' in message['message']:
+                            payload = message['message']['quick_reply']['payload']
+                            print("payload is: " + str(payload))
 
-                if not db.session.query(User).filter(User.user_id == recipient_id).count():
-                    bot.send_text_message(recipient_id, "Welcome, we've added you to our database at time " + str(datetime.now()))
-                    insert = User(recipient_id, datetime.now())
-                    db.session.add(insert)
-                    db.session.commit()
-                else:
-                    user = User.query.filter_by(user_id=recipient_id).first()
-                    print(user)
-                    if 'quick_reply' in message['message']:
-                        payload = message['message']['quick_reply']['payload']
-                        print("payload is: " + str(payload))
+                            if user.fractions_in_progress:
+                                if payload == 'correct':
+                                    bot.send_text_message(recipient_id, "Well done!")
+                                    send_fractions_question(recipient_id)
+                                else:
+                                    bot.send_text_message(recipient_id, "Not quite...")
 
-                        if user.fractions_in_progress:
-                            if payload == 'correct':
-                                bot.send_text_message(recipient_id, "Well done!")
+                            if payload == "fractions":
+                                print(user.fractions_in_progress)
+                                user.fractions_in_progress = True
+                                db.session.commit()
                                 send_fractions_question(recipient_id)
-                            else:
-                                bot.send_text_message(recipient_id, "Not quite...")
-
-                        if payload == "fractions":
-                            print(user.fractions_in_progress)
-                            user.fractions_in_progress = True
-                            db.session.commit()
-                            send_fractions_question(recipient_id)
-                        
-
-
-                    welcome_screen(recipient_id)
+                        else:
+                            welcome_screen(recipient_id)
                 # if message['message'].get('text'):
                 #     response_sent_text = get_message()
                 #     send_message(recipient_id, response_sent_text)
