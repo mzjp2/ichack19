@@ -6,6 +6,7 @@ from flask_heroku import Heroku
 from datetime import datetime
 import os
 import questions
+import requests
 
 
 app = Flask(__name__)
