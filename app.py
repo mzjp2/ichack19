@@ -273,9 +273,9 @@ def compute_summary(recipient_id, user, payload):
 @app.route("/homework", methods=['POST', 'GET'], endpoint='homework')
 @cross_origin()
 def homework():
-    if request_method == 'POST':
+    if request.method == 'POST':
         print(request.json(['amount']))
-        
+
     content = request.get_json()
     print(content)
     recipient_id = '1979973702071807'
