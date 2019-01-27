@@ -8,8 +8,6 @@ import os
 import questions
 import requests
 
-question_prev = ""
-
 app = Flask(__name__)
 ACCESS_TOKEN = 'EAAfnLOamFLkBAOfiSZCw9uScml7VYJ2F172pcZAAtlfE7ZCfdA6Q6U3pHb6sQaE3XSGbQfuNdresz5zRZAWQz0hY1jSOJxsukudGngzeE44OxHI7g2LBmxLKFA7h8ZBG6K9umSAjras8H3tuf9UbJiROdnFayaGAylotLAq4IdgZDZD'
 VERIFY_TOKEN = 'SSA19'
@@ -35,8 +33,10 @@ class User(db.Model):
     num_quadratics_questions = db.Column(db.Integer())
     num_correct_fractions_questions = db.Column(db.Integer())
     num_correct_quadratics_questions = db.Column(db.Integer())
+    prev_q = db.Column(db.String(240))
+    comment = db.Column(db.String(240))
 
-    def __init__(self, user_id, last_timestamp, user_first_name, user_last_name, fractions_in_progress = False, quadratics_in_progress = False, question_number = 0, num_fractions_questions = 0, num_quadratics_questions = 0, num_correct_fractions_questions = 0, num_correct_quadratics_questions = 0):
+    def __init__(self, user_id, last_timestamp, user_first_name, user_last_name, fractions_in_progress = False, quadratics_in_progress = False, question_number = 0, num_fractions_questions = 0, num_quadratics_questions = 0, num_correct_fractions_questions = 0, num_correct_quadratics_questions = 0, prev_q = "", comment = ""):
         self.user_id = user_id
         self.user_first_name = user_first_name
         self.user_last_name = user_last_name
@@ -48,6 +48,8 @@ class User(db.Model):
         self.num_quadratics_questions = num_quadratics_questions
         self.num_correct_fractions_questions = num_correct_fractions_questions
         self.num_correct_quadratics_questions = num_correct_quadratics_questions
+        self.prev_q = prev_q
+        self.comment = comment
 
     def __repr__(self):
         return '<User ID %r>' % self.user_id
@@ -105,7 +107,7 @@ def receive_message():
                                     bot.send_text_message(recipient_id, "Well done!")
                                     send_fractions_question(recipient_id, user)
                                 elif payload == 'incorrect':
-                                    bot.send_text_message(recipient_id, "PLEASE COMMENT THIS" +question_prev)
+                                    bot.send_text_message(recipient_id, "PLEASE COMMENT THIS" + user.prev_q)
                                     send_quick_reply(recipient_id, 'Not quite...', [('Comment', 'comment'), ('Next', 'next'), ('Stop', 'stop')])
                                 elif payload == 'next':
                                     send_fractions_question(recipient_id, user)
@@ -160,9 +162,8 @@ def send_fractions_question(recipient_id, user):
         else:
             quick_reply.append((option, 'incorrect'))
     user.question_number += 1
+    user.prev_q = question['question']
     db.session.commit()
-    global question_prev
-    question_prev = question['question']
     send_quick_reply(recipient_id, "Question #" + str(user.question_number) + ": " + question['question'], quick_reply)
     return question
 
@@ -175,6 +176,7 @@ def send_quadratics_question(recipient_id,user):
         else:
             quick_reply.append((option, 'incorrect'))
     user.question_number += 1
+    user.prev_q = question['question']
     db.session.commit()
     send_quick_reply(recipient_id, "Question #" + str(user.question_number) + ": " + question['question'], quick_reply)
 
