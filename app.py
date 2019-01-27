@@ -102,7 +102,6 @@ def receive_message():
                                     bot.send_text_message(recipient_id, "Well done!")
                                     send_fractions_question(recipient_id)
                                 elif payload == 'incorrect':
-                                    bot.send_text_message(recipient_id, "Not quite...")
                                     send_quick_reply(recipient_id, 'Not quite...', [('Comment', 'comment'), ('Next', 'next'), ('Stop', 'stop')])
                                 elif payload == 'next':
                                     send_fractions_question(recipient_id)
@@ -123,7 +122,6 @@ def receive_message():
                                     bot.send_text_message(recipient_id, "Well done!")
                                     send_quadratics_question(recipient_id)
                                 elif payload == 'incorrect':
-                                    bot.send_text_message(recipient_id, "Not quite...")
                                     send_quick_reply(recipient_id, 'Not quite...', [('Comment', 'comment'), ('Next', 'next'), ('Stop', 'stop')])
                                 elif payload == 'next':
                                     send_quadratics_question(recipient_id)
@@ -225,7 +223,7 @@ def send_help(recipient_id):
      pass
 
 def ask_summary(recipient_id):
-    user_info = bot.get_user_info(recipient_id, fields='first_name')
+    user_info = get_user_info(recipient_id, fields='first_name')
     send_quick_reply(recipient_id, "Hi,  " + user_info['first_name'] + '!' + " What would you like to see?", [('Fractions summary', 'fractions-summary'), ('Quadratics summary', 'quadratics-summary'), ('All summary', 'all-summary')])
 
 def compute_summary(recipient_id, user, payload):
