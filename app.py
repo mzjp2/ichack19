@@ -29,9 +29,13 @@ class User(db.Model):
     last_timestamp = db.Column(db.String(120))
     fractions_in_progress = db.Column(db.Boolean())
     quadratics_in_progress = db.Column(db.Boolean())
-    question_number = db.Column(db.Integer)
+    question_number = db.Column(db.Integer())
+    num_fractions_questions = db.Column(db.Integer())
+    num_quadratics_questions = db.Column(db.Integer())
+    num_correct_fractions_questions = db.Column(db.Integer())
+    num_correct_quadratics_questions = db.Column(db.Integer())
 
-    def __init__(self, user_id, last_timestamp, user_first_name, user_last_name, fractions_in_progress = False, quadratics_in_progress = False, question_number = 0):
+    def __init__(self, user_id, last_timestamp, user_first_name, user_last_name, fractions_in_progress = False, quadratics_in_progress = False, question_number = 0, num_fractions_questions = 0, num_quadratics_questions = 0, num_correct_fractions_questions = 0, num_correct_quadratics_questions = 0):
         self.user_id = user_id
         self.user_first_name = user_first_name
         self.user_last_name = user_last_name
@@ -39,6 +43,10 @@ class User(db.Model):
         self.fractions_in_progress = fractions_in_progress
         self.quadratics_in_progress = quadratics_in_progress
         self.question_number = question_number
+        self.num_fractions_questions = num_fractions_questions
+        self.num_quadratics_questions = num_quadratics_questions
+        self.num_correct_fractions_questions = num_correct_fractions_questions
+        self.num_correct_quadratics_questions = num_correct_quadratics_questions
 
     def __repr__(self):
         return '<User ID %r>' % self.user_id
@@ -83,8 +91,33 @@ def receive_message():
                                 if payload == 'correct':
                                     bot.send_text_message(recipient_id, "Well done!")
                                     send_fractions_question(recipient_id)
-                                else:
+                                elif payload == 'incorrect':
                                     bot.send_text_message(recipient_id, "Not quite...")
+                                    bot.send_quick_reply(recipient_id, 'Not quite...', [('Comment', 'comment'), ('Next', 'next'), ('Stop', 'stop')])
+                                elif payload == 'next':
+                                    send_fractions_question(recipient_id)
+                                    user.question_number = user.question_numer + 1
+                                    db.session.commit()
+                                elif payload == 'stop':
+                                    reset(user)
+                                elif payload == 'comment':
+                                    bot.send_text_message(recipient_id, 'hi')
+
+                            if user.quadratics_in_progress:
+                                if payload == 'correct':
+                                    bot.send_text_message(recipient_id, "Well done!")
+                                    send_quadratics_question(recipient_id)
+                                elif payload == 'incorrect':
+                                    bot.send_text_message(recipient_id, "Not quite...")
+                                    bot.send_quick_reply(recipient_id, 'Not quite...', [('Comment', 'comment'), ('Next', 'next'), ('Stop', 'stop')])
+                                elif payload == 'next':
+                                    send_quadratics_question(recipient_id)
+                                    user.question_number = user.question_numer + 1
+                                    db.session.commit()
+                                elif payload == 'stop':
+                                    reset(user)
+                                elif payload == 'comment':
+                                    bot.send_text_message(recipient_id, 'hi')
 
                             if payload == "fractions":
                                 print(user.fractions_in_progress)
@@ -100,17 +133,21 @@ def receive_message():
 
                         else:
                             welcome_screen(recipient_id)
-                # if message['message'].get('text'):
-                #     response_sent_text = get_message()
-                #     send_message(recipient_id, response_sent_text)
-                # #if user sends us a GIF, photo,video, or any other non-text item
-                # if message['message'].get('attachments'):
-                #     response_sent_nontext = get_message()
-                #     send_message(recipient_id, response_sent_nontext)
     return "Message Processed"
 
 def send_fractions_question(recipient_id):
     question = questions.questiontype1()
+    quick_reply = []
+    for option in question['options']:
+        if question['answer'] == option:
+            quick_reply.append((option, 'correct'))
+        else:
+            quick_reply.append((option, 'incorrect'))
+
+    send_quick_reply(recipient_id, question['question'], quick_reply)
+
+def send_quadratics_questions(recipient_id):
+    question = questions.questiontype2()
     quick_reply = []
     for option in question['options']:
         if question['answer'] == option:
@@ -127,19 +164,6 @@ def verify_fb_token(token_sent):
     if token_sent == VERIFY_TOKEN:
         return request.args.get("hub.challenge")
     return 'Invalid verification token'
-
-
-#chooses a random message to send to the user
-def get_message():
-    sample_responses = ["$$x+2 = 3$$"]
-    # return selected item to the user
-    return random.choice(sample_responses)
-
-#uses PyMessenger to send response to user
-def send_message(recipient_id, response):
-    #sends user the text message provided via input response parameter
-    bot.send_text_message(recipient_id, response)
-    return "success"
 
 def welcome_screen(recipient_id):
     user_info = get_user_info(recipient_id, fields='first_name')

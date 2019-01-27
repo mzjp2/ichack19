@@ -27,3 +27,19 @@ def questiontype1(level = 2):
     rand.shuffle(answers)
     options = answers
     return {'question': question, 'options': options, 'answer': real_answer}
+
+def questiontype2(level):
+    a = int(10 * level * rand.random() + 1) - 5*level
+    b = int(10 * level * rand.random() + 1) - 5*level
+    c = int(10 * level * rand.random() + 1) - 5*level
+    d = int(10 * level * rand.random() + 1) - 5*level
+    e = int(10 * level * rand.random() + 1) - 5*level
+    f = int(10 * level * rand.random() + 1) - 5*level
+    if a + b > 0:
+        question = "What are the roots of " + '\\(x^2 ' + '- ' + str((a+b)) + 'x ' +'+ ' + str(a*b) + '\\)'
+    else:
+        question = "What are the roots of " + '\\(x^2 ' + '+ ' + str(-(a + b)) + 'x ' + '+ ' + str(a * b) + '\\)'
+    real_answer = str(a) + ',' + str(b)
+    options = [real_answer, str((a+b)) + ',' + str(a*b), str(c) + ',' + str(d), str(e) + ',' + str(f)]
+    rand.shuffle(options)
+    return {'question': question, 'options': options, 'answer': real_answer}
